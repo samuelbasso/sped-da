@@ -71,6 +71,7 @@ class Dacte extends Common
     protected $infNF;
     protected $infNFe;
     protected $compl;
+    protected $vTotTrib;
     protected $ICMS;
     protected $imp;
     protected $toma4;
@@ -85,6 +86,8 @@ class Dacte extends Common
     protected $formatPadrao;
     protected $formatNegrito;
     protected $aquav;
+    protected $siteDesenvolvedor;
+    protected $nomeDesenvolvedor;
 
     /**
      * __construct
@@ -106,7 +109,10 @@ class Dacte extends Common
         $sDestino = 'I',
         $sDirPDF = '',
         $fonteDACTE = '',
-        $mododebug = 2
+        $mododebug = 2,
+        $nomeDesenvolvedor = 'Powered by NFePHP (GNU/GPLv3 GNU/LGPLv3) '
+        . ' © www.nfephp.org',
+        $siteDesenvolvedor = 'http://www.nfephp.org'
     ) {
     
         if (is_numeric($mododebug)) {
@@ -128,6 +134,8 @@ class Dacte extends Common
         $this->logomarca = $sPathLogo;
         $this->destino = $sDestino;
         $this->pdfDir = $sDirPDF;
+        $this->siteDesenvolvedor = $siteDesenvolvedor;
+        $this->nomeDesenvolvedor = $nomeDesenvolvedor;
         // verifica se foi passa a fonte a ser usada
         if (!empty($fonteDACTE)) {
             $this->fontePadrao = $fonteDACTE;
@@ -177,6 +185,7 @@ class Dacte extends Common
             $this->ICMS = $this->dom->getElementsByTagName("ICMS")->item(0);
             $this->ICMSSN = $this->dom->getElementsByTagName("ICMSSN")->item(0);
             $this->imp = $this->dom->getElementsByTagName("imp")->item(0);
+            $this->vTotTrib = $this->dom->getElementsByTagName("vTotTrib")->item(0);
             $this->toma4 = $this->dom->getElementsByTagName("toma4")->item(0);
             $this->toma03 = $this->dom->getElementsByTagName("toma03")->item(0);
             //modal aquaviário
@@ -1159,19 +1168,19 @@ class Dacte extends Common
      */
     protected function zRodape($x, $y)
     {
-        $texto = "Impresso em  " . date('d/m/Y   H:i:s');
+        $texto = "Impresso em  " . date('d/m/Y   H:i:s') . " - DacteNFePHP ver. " . $this->version . "";
         $w = $this->wPrint - 4;
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 6,
             'style' => '');
         $this->pTextBox($x, $y, $w, 4, $texto, $aFont, 'T', 'L', 0, '');
-        $texto = "DacteNFePHP ver. " . $this->version . "  Powered by NFePHP (GNU/GPLv3 GNU/LGPLv3) © www.nfephp.org";
+        $texto = $this->nomeDesenvolvedor . ' - '. $this->siteDesenvolvedor;
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 6,
             'style' => '');
-        $this->pTextBox($x, $y, $w, 4, $texto, $aFont, 'T', 'R', 0, 'http://www.nfephp.org');
+        $this->pTextBox($x, $y, $w, 4, $texto, $aFont, 'T', 'R', 0, $this->siteDesenvolvedor);
     } //fim zRodape
 
     /**
@@ -1784,8 +1793,11 @@ class Dacte extends Common
         $texto = 'QTDE(VOL)';
         $aFont = $this->formatPadrao;
         $this->pTextBox($x, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $qCarga = $this->pSimpleGetValue($this->infQ->item(3), "qCarga");
-        $texto = !empty($qCarga) ? number_format($qCarga, 3, ",", ".") : '';
+
+        $texto = $this->pSimpleGetValue($this->infQ->item(0), "qCarga");
+        $texto = number_format($texto, 3, ",", ".");
+//        $qCarga = $this->pSimpleGetValue($this->infQ->item(3), "qCarga");
+//        $texto = !empty($qCarga) ? number_format($qCarga, 3, ",", ".") : '';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 7,
@@ -2349,6 +2361,7 @@ class Dacte extends Common
             $xObs = $this->pSimpleGetValue($this->compl->item($k), "xObs");
             $texto .= "\r\n" . $xObs;
         }
+        $texto .= ("Valor Aproximado dos Tributos: R$ ".$this->pSimpleGetValue($this->imp, "vTotTrib"));
         $texto .= $this->pSimpleGetValue($this->imp, "infAdFisco", "\r\n");
         $texto .= $this->zLocalEntrega();
         $aFont = array(
