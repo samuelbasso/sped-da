@@ -111,7 +111,7 @@ class Dacte extends Common
         $fonteDACTE = '',
         $mododebug = 2,
         $nomeDesenvolvedor = 'Powered by NFePHP (GNU/GPLv3 GNU/LGPLv3) '
-        . ' © www.nfephp.org',
+            . '© www.nfephp.org',
         $siteDesenvolvedor = 'http://www.nfephp.org'
     ) {
     
@@ -1168,7 +1168,8 @@ class Dacte extends Common
      */
     protected function zRodape($x, $y)
     {
-        $texto = "Impresso em  " . date('d/m/Y   H:i:s') . " - DacteNFePHP ver. " . $this->version . "";
+        $texto = "Impresso em  " . date('d/m/Y   H:i:s') 
+                . " - DacteNFePHP ver. " . $this->version . "";
         $w = $this->wPrint - 4;
         $aFont = array(
             'font' => $this->fontePadrao,
@@ -1794,7 +1795,7 @@ class Dacte extends Common
         $aFont = $this->formatPadrao;
         $this->pTextBox($x, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
 
-        $texto = $this->pSimpleGetValue($this->infQ->item(0), "qCarga");
+        $texto = $this->pSimpleGetValue($this->infQ->item(0),"qCarga");
         $texto = number_format($texto, 3, ",", ".");
 //        $qCarga = $this->pSimpleGetValue($this->infQ->item(3), "qCarga");
 //        $texto = !empty($qCarga) ? number_format($qCarga, 3, ",", ".") : '';
@@ -1975,7 +1976,7 @@ class Dacte extends Common
         $texto = 'SITUAÇÃO TRIBUTÁRIA';
         $aFont = $this->formatPadrao;
         $this->pTextBox($x, $y, $w * 0.26, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $x += $w * 0.26;
+        $x += $w * 0.45;
         $this->pdf->Line($x, $y, $x, $y + 9.5);
         $texto = 'BASE DE CALCULO';
         $aFont = $this->formatPadrao;
@@ -1993,11 +1994,6 @@ class Dacte extends Common
         $x += $w * 0.14;
         $this->pdf->Line($x, $y, $x, $y + 9.5);
         $texto = '% RED. BC ICMS';
-        $aFont = $this->formatPadrao;
-        $this->pTextBox($x, $y, $w * 0.14, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $x += $w * 0.14;
-        $this->pdf->Line($x, $y, $x, $y + 9.5);
-        $texto = 'ICMS ST';
         $aFont = $this->formatPadrao;
         $this->pTextBox($x, $y, $w * 0.14, $h, $texto, $aFont, 'T', 'L', 0, '');
         $x = $oldX;
@@ -2030,28 +2026,34 @@ class Dacte extends Common
         $texto = $texto == 1 ? 'Simples Nacional' : $texto;
         $aFont = $this->formatNegrito;
         $this->pTextBox($x, $y, $w * 0.26, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $x += $w * 0.26;
+        $x += $w * 0.45;
         $texto = !empty($this->ICMS->getElementsByTagName("vBC")->item(0)->nodeValue) ?
             number_format($this->pSimpleGetValue($this->ICMS, "vBC"), 2, ",", ".") :
-            '';
+            (!empty($this->ICMS->getElementsByTagName("vBCSTRet")->item(0)->nodeValue) ?
+                number_format($this->pSimpleGetValue($this->ICMS, "vBCSTRet"), 2, ",", ".") :
+            '');
         $aFont = $this->formatNegrito;
         $this->pTextBox($x, $y, $w * 0.14, $h, $texto, $aFont, 'T', 'L', 0, '');
         $x += $w * 0.14;
         $texto = !empty($this->ICMS->getElementsByTagName("pICMS")->item(0)->nodeValue) ?
-            number_format($this->pSimpleGetValue($this->ICMS, "pICMS"), 2, ",", ".") : '';
+            number_format($this->pSimpleGetValue($this->ICMS, "pICMS"), 2, ",", ".") :
+            (!empty($this->ICMS->getElementsByTagName("pICMSSTRet")->item(0)->nodeValue) ?
+                number_format($this->pSimpleGetValue($this->ICMS, "pICMSSTRet"), 2, ",", ".") :
+            '');
         $aFont = $this->formatNegrito;
         $this->pTextBox($x, $y, $w * 0.14, $h, $texto, $aFont, 'T', 'L', 0, '');
         $x += $w * 0.14;
         $texto = !empty($this->ICMS->getElementsByTagName("vICMS")->item(0)->nodeValue) ?
-            number_format($this->pSimpleGetValue($this->ICMS, "vICMS"), 2, ",", ".") : '';
+            number_format($this->pSimpleGetValue($this->ICMS, "vICMS"), 2, ",", ".") :
+            (!empty($this->ICMS->getElementsByTagName("vICMSSTRet")->item(0)->nodeValue) ?
+                number_format($this->pSimpleGetValue($this->ICMS, "vICMSSTRet"), 2, ",", ".") :
+            '');
         $aFont = $this->formatNegrito;
         $this->pTextBox($x, $y, $w * 0.14, $h, $texto, $aFont, 'T', 'L', 0, '');
         $x += $w * 0.14;
-        $texto = '';
-        $aFont = $this->formatNegrito;
-        $this->pTextBox($x, $y, $w * 0.14, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $x += $w * 0.14;
-        $texto = '';
+        $texto = !empty($this->ICMS->getElementsByTagName("pRedBC")->item(0)->nodeValue) ?
+            number_format($this->pSimpleGetValue($this->ICMS, "pRedBC"), 2, ",", ".") :
+            '';
         $aFont = $this->formatNegrito;
         $this->pTextBox($x, $y, $w * 0.14, $h, $texto, $aFont, 'T', 'L', 0, '');
     } //fim da função compValorDACTE
@@ -2361,7 +2363,6 @@ class Dacte extends Common
             $xObs = $this->pSimpleGetValue($this->compl->item($k), "xObs");
             $texto .= "\r\n" . $xObs;
         }
-        $texto .= ("Valor Aproximado dos Tributos: R$ ".$this->pSimpleGetValue($this->imp, "vTotTrib"));
         $texto .= $this->pSimpleGetValue($this->imp, "infAdFisco", "\r\n");
         $texto .= $this->zLocalEntrega();
         $aFont = array(
