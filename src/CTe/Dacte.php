@@ -1169,7 +1169,7 @@ class Dacte extends Common
      */
     protected function zRodape($x, $y)
     {
-        $texto = "Impresso em  " . date('d/m/Y   H:i:s') 
+        $texto = "Impresso em " . date('d/m/Y   H:i:s') 
                 . " DacteNFePHP ver. " . $this->version;
         $w = $this->wPrint - 4;
         $aFont = array(
