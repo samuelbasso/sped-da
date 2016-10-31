@@ -89,6 +89,7 @@ class Dacte extends Common
     protected $siteDesenvolvedor;
     protected $nomeDesenvolvedor;
 
+    
     /**
      * __construct
      *
@@ -111,7 +112,7 @@ class Dacte extends Common
         $fonteDACTE = '',
         $mododebug = 2,
         $nomeDesenvolvedor = 'Powered by NFePHP (GNU/GPLv3 GNU/LGPLv3) '
-            . '© www.nfephp.org',
+        . '© www.nfephp.org',
         $siteDesenvolvedor = 'http://www.nfephp.org'
     ) {
     
@@ -1169,7 +1170,7 @@ class Dacte extends Common
      */
     protected function zRodape($x, $y)
     {
-        $texto = "Impresso em " . date('d/m/Y   H:i:s') 
+        $texto = "Impresso em " . date('d/m/Y   H:i:s')
                 . " DacteNFePHP ver. " . $this->version;
         $w = $this->wPrint - 4;
         $aFont = array(
@@ -1796,7 +1797,7 @@ class Dacte extends Common
         $aFont = $this->formatPadrao;
         $this->pTextBox($x, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
 
-        $texto = $this->pSimpleGetValue($this->infQ->item(0),"qCarga");
+        $texto = $this->pSimpleGetValue($this->infQ->item(0), "qCarga");
         $texto = number_format($texto, 3, ",", ".");
 //        $qCarga = $this->pSimpleGetValue($this->infQ->item(3), "qCarga");
 //        $texto = !empty($qCarga) ? number_format($qCarga, 3, ",", ".") : '';
