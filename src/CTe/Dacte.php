@@ -152,6 +152,7 @@ class Dacte extends Common
         if (!empty($this->xml)) {
             $this->dom = new Dom();
             $this->dom->loadXML($this->xml);
+//            dd($this->dom);
             $this->cteProc = $this->dom->getElementsByTagName("cteProc")->item(0);
             $this->infCte = $this->dom->getElementsByTagName("infCte")->item(0);
             $this->ide = $this->dom->getElementsByTagName("ide")->item(0);
@@ -1168,15 +1169,14 @@ class Dacte extends Common
      */
     protected function zRodape($x, $y)
     {
-        $texto = "Impresso em  " . date('d/m/Y   H:i:s') 
-                . " - DacteNFePHP ver. " . $this->version . "";
+        $texto = "Impresso em  " . date('d/m/Y   H:i:s');
         $w = $this->wPrint - 4;
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 6,
             'style' => '');
         $this->pTextBox($x, $y, $w, 4, $texto, $aFont, 'T', 'L', 0, '');
-        $texto = $this->nomeDesenvolvedor . ' - '. $this->siteDesenvolvedor;
+        $texto = 'Desenvolvido por '.$this->nomeDesenvolvedor . ' - '. $this->siteDesenvolvedor;
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 6,
